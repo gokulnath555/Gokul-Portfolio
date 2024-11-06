@@ -1,17 +1,21 @@
 import React, { useState, useEffect } from 'react';
-import { 
-  Code, 
-  User,
-  Briefcase,
-  GraduationCap,
-  Award,
-  Laptop,
-  FileCode,
-  Terminal,
-  Globe,
-  Settings,
-  UserCircle
-} from 'lucide-react';
+
+// Simple icon component
+const IconComponent = ({ children, className }) => (
+  <span className={`inline-flex items-center justify-center ${className}`}>
+    {children}
+  </span>
+);
+
+// Define background colors for each section
+const sectionStyles = {
+  'professional-summary': 'bg-blue-50',
+  'skills': 'bg-green-50',
+  'experience': 'bg-yellow-50',
+  'education': 'bg-purple-50',
+  'projects': 'bg-pink-50',
+  'certifications': 'bg-indigo-50',
+};
 
 const Header = ({ toggleDrawer }) => (
   <div className="bg-gradient-to-r from-indigo-600 to-purple-600 shadow-lg sticky top-0 z-50">
@@ -20,11 +24,11 @@ const Header = ({ toggleDrawer }) => (
         onClick={toggleDrawer}
         className="text-white hover:bg-indigo-700 p-2 rounded-full transition-colors duration-300"
       >
-        <Code className="w-6 h-6" />
+        <IconComponent className="w-6 h-6">⌨️</IconComponent>
       </button>
-      <h1 className="text-2xl font-bold text-white">GokulNath  Portfolio</h1>
+      <h1 className="text-2xl font-bold text-white">GokulNath Portfolio</h1>
       <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center">
-        <UserCircle className="w-6 h-6 text-indigo-600" />
+        <IconComponent className="w-6 h-6 text-indigo-600">👤</IconComponent>
       </div>
     </div>
   </div>
@@ -32,37 +36,49 @@ const Header = ({ toggleDrawer }) => (
 
 const Sidebar = ({ open, toggleDrawer, activeSection, onSectionClick }) => {
   const sections = [
-    { name: 'Professional Summary', icon: <User className="w-5 h-5" /> },
-    { name: 'Skills', icon: <Laptop className="w-5 h-5" /> },
-    { name: 'Experience', icon: <Briefcase className="w-5 h-5" /> },
-    { name: 'Education', icon: <GraduationCap className="w-5 h-5" /> },
-    { name: 'Projects', icon: <FileCode className="w-5 h-5" /> },
-    { name: 'Certifications', icon: <Award className="w-5 h-5" /> },
+    { name: 'Professional Summary', icon: <IconComponent className="w-5 h-5">👤</IconComponent> },
+    { name: 'Skills', icon: <IconComponent className="w-5 h-5">💻</IconComponent> },
+    { name: 'Experience', icon: <IconComponent className="w-5 h-5">💼</IconComponent> },
+    { name: 'Education', icon: <IconComponent className="w-5 h-5">🎓</IconComponent> },
+    { name: 'Projects', icon: <IconComponent className="w-5 h-5">📁</IconComponent> },
+    { name: 'Certifications', icon: <IconComponent className="w-5 h-5">🏆</IconComponent> },
   ];
 
   return (
     <div 
-      className={`fixed inset-y-0 left-0 w-64 bg-white shadow-lg z-50 transform ${
+      className={`fixed inset-y-0 left-0 w-64 bg-gradient-to-b from-white via-indigo-50 to-purple-50 shadow-lg z-50 transform ${
         open ? 'translate-x-0' : '-translate-x-full'
       } transition-transform duration-300 ease-in-out`}
     >
-      <div className="p-6">
-        <h2 className="text-xl font-bold text-indigo-600 mb-6 flex items-center">
-          <Code className="mr-2" /> GokulNath
-        </h2>
-        <nav>
+      <div className="h-full p-6 bg-white bg-opacity-90">
+        <div className="flex items-center space-x-3 mb-8">
+          <div className="p-2 bg-gradient-to-r from-indigo-600 to-purple-600 rounded-lg">
+            <IconComponent className="w-6 h-6 text-white">⌨️</IconComponent>
+          </div>
+          <h2 className="text-xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
+            GokulNath
+          </h2>
+        </div>
+        
+        <nav className="space-y-2">
           {sections.map((section) => (
             <button
               key={section.name}
               onClick={() => onSectionClick(section.name.toLowerCase().replace(' ', '-'))}
-              className={`flex items-center w-full text-left p-3 mb-2 rounded-lg transition-all duration-300 ${
+              className={`flex items-center w-full text-left p-3 rounded-lg transition-all duration-300 group ${
                 activeSection === section.name.toLowerCase().replace(' ', '-')
-                  ? 'bg-indigo-50 text-indigo-600 shadow-md'
-                  : 'hover:bg-gray-50 hover:text-indigo-600'
+                  ? 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-md'
+                  : 'hover:bg-indigo-50 text-gray-700 hover:text-indigo-600'
               }`}
             >
-              <span className="mr-3">{section.icon}</span>
-              {section.name}
+              <span className={`mr-3 transition-transform duration-300 group-hover:scale-110 ${
+                activeSection === section.name.toLowerCase().replace(' ', '-')
+                  ? 'text-white'
+                  : 'text-indigo-600'
+              }`}>
+                {section.icon}
+              </span>
+              <span className="font-medium">{section.name}</span>
             </button>
           ))}
         </nav>
@@ -71,18 +87,22 @@ const Sidebar = ({ open, toggleDrawer, activeSection, onSectionClick }) => {
   );
 };
 
-const SectionCard = ({ title, icon, children, id }) => (
-  <div
-    id={id}
-    className="bg-white rounded-xl shadow-lg p-6 mb-6 hover:shadow-xl transition-all duration-500 hover:-translate-y-1"
-  >
-    <h2 className="text-xl font-bold text-indigo-600 mb-4 flex items-center">
-      {icon}
-      <span className="ml-2">{title}</span>
-    </h2>
-    {children}
-  </div>
-);
+const SectionCard = ({ title, icon, children, id }) => {
+  const sectionClass = sectionStyles[id];
+
+  return (
+    <div
+      id={id}
+      className={`${sectionClass} rounded-xl shadow-lg p-6 mb-6 hover:shadow-xl transition-all duration-500 hover:-translate-y-1`}
+    >
+      <h2 className="text-xl font-bold text-indigo-600 mb-4 flex items-center">
+        {icon}
+        <span className="ml-2">{title}</span>
+      </h2>
+      {children}
+    </div>
+  );
+};
 
 const SkillBar = ({ skill, level, icon }) => (
   <div className="mb-4">
@@ -153,47 +173,47 @@ const App = () => {
         activeSection={activeSection}
         onSectionClick={handleSectionClick}
       />
-      
+
       <div className="max-w-7xl mx-auto px-4 py-8">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
             <SectionCard 
               title="Professional Summary" 
               id="professional-summary"
-              icon={<User className="w-6 h-6" />}
+              icon={<IconComponent className="w-6 h-6">👤</IconComponent>}
             >
               <p className="text-gray-600 leading-relaxed">
-              Versatile Web Developer and Proprietor with over six years of experience in web development, 
-design, and real estate image editing. Proficient in HTML5, JavaScript, CSS, and React.js, with 
-a strong foundation in creating responsive, user-friendly websites. Known for managing 
-end-to-end client projects and delivering high-quality visual content for real estate clients. 
-Currently seeking to leverage technical expertise and client management experience in a Web 
-Developer role.
+                Versatile Web Developer and Proprietor with over six years of experience in web development, 
+                design, and real estate image editing. Proficient in HTML5, JavaScript, CSS, and React.js, with 
+                a strong foundation in creating responsive, user-friendly websites. Known for managing 
+                end-to-end client projects and delivering high-quality visual content for real estate clients. 
+                Currently seeking to leverage technical expertise and client management experience in a Web 
+                Developer role.
               </p>
             </SectionCard>
 
             <SectionCard 
               title="Technical Skills" 
               id="skills"
-              icon={<Settings className="w-6 h-6" />}
+              icon={<IconComponent className="w-6 h-6">💻</IconComponent>}
             >
-              <SkillBar skill="React.js" level={90} icon={<Code className="w-4 h-4 text-blue-500" />} />
-              <SkillBar skill="JavaScript" level={85} icon={<Terminal className="w-4 h-4 text-yellow-500" />} />
-              <SkillBar skill="HTML/CSS" level={95} icon={<Globe className="w-4 h-4 text-red-500" />} />
-              <SkillBar skill="Photoshop/LightRoom " level={80} icon={<Settings className="w-4 h-4 text-blue-500" />} />
+              <SkillBar skill="React.js" level={90} icon={<IconComponent className="w-4 h-4">⚛️</IconComponent>} />
+              <SkillBar skill="JavaScript" level={85} icon={<IconComponent className="w-4 h-4">📜</IconComponent>} />
+              <SkillBar skill="HTML/CSS" level={95} icon={<IconComponent className="w-4 h-4">🌐</IconComponent>} />
+              <SkillBar skill="Photoshop/LightRoom" level={80} icon={<IconComponent className="w-4 h-4">🎨</IconComponent>} />
             </SectionCard>
 
             <SectionCard 
               title="Experience" 
               id="experience"
-              icon={<Briefcase className="w-6 h-6" />}
+              icon={<IconComponent className="w-6 h-6">💼</IconComponent>}
             >
               {[
                 {
                   role: "Web Developer",
                   company: "Grow Technologies",
                   period: "2018 - 2021",
-                  description: " Designed and developed responsive, visually engaging websites that aligned with client enhanced user experiance "
+                  description: "Designed and developed responsive, visually engaging websites that enhanced user experience."
                 },
                 {
                   role: "Proprietor",
@@ -216,7 +236,7 @@ Developer role.
             <SectionCard 
               title="Education" 
               id="education"
-              icon={<GraduationCap className="w-6 h-6" />}
+              icon={<IconComponent className="w-6 h-6">🎓</IconComponent>}
             >
               <div className="space-y-4">
                 {[
@@ -243,7 +263,7 @@ Developer role.
             <SectionCard 
               title="Projects" 
               id="projects"
-              icon={<FileCode className="w-6 h-6" />}
+              icon={<IconComponent className="w-6 h-6">📁</IconComponent>}
             >
               <div className="space-y-4">
                 {[
@@ -251,10 +271,10 @@ Developer role.
                     name: "Portfolio Website",
                     description: "Personal portfolio built with React and Tailwind CSS"
                   },
-                  // {
-                  //   name: "E-commerce Platform",
-                  //   description: "Full-stack e-commerce solution with React and Node.js"
-                  // }
+                  {
+                    name: "E-commerce Platform",
+                    description: "Full-stack e-commerce solution with React and Node.js"
+                  }
                 ].map((project, index) => (
                   <div key={index} className="p-4 rounded-lg hover:bg-indigo-50 transition-colors">
                     <h3 className="font-semibold text-gray-800">{project.name}</h3>
@@ -267,7 +287,7 @@ Developer role.
             <SectionCard 
               title="Certifications" 
               id="certifications"
-              icon={<Award className="w-6 h-6" />}
+              icon={<IconComponent className="w-6 h-6">🏆</IconComponent>}
             >
               <div className="space-y-4">
                 {[
@@ -279,7 +299,6 @@ Developer role.
                     name: "Digital Marketing Certification",
                     year: "2024"
                   },
-
                   {
                     name: "Java Developer Certification",
                     year: "2017"
