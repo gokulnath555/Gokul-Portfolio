@@ -299,10 +299,10 @@ const App = () => {
                     name: "Digital Marketing Certification",
                     year: "2024"
                   },
-                  {
-                    name: "Java Developer Certification",
-                    year: "2017"
-                  }
+                  // {
+                  //   name: "Java Developer Certification",
+                  //   year: "2017"
+                  // }
                 ].map((cert, index) => (
                   <div key={index} className="p-4 rounded-lg hover:bg-indigo-50 transition-colors">
                     <h3 className="font-semibold text-gray-800">{cert.name}</h3>
