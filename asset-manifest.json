@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/Gokul-Portfolio/static/css/main.a7b68da7.css",
+    "main.js": "/Gokul-Portfolio/static/js/main.6ee15ce3.js",
+    "static/js/453.1407b060.chunk.js": "/Gokul-Portfolio/static/js/453.1407b060.chunk.js",
+    "index.html": "/Gokul-Portfolio/index.html",
+    "main.a7b68da7.css.map": "/Gokul-Portfolio/static/css/main.a7b68da7.css.map",
+    "main.6ee15ce3.js.map": "/Gokul-Portfolio/static/js/main.6ee15ce3.js.map",
+    "453.1407b060.chunk.js.map": "/Gokul-Portfolio/static/js/453.1407b060.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.a7b68da7.css",
+    "static/js/main.6ee15ce3.js"
+  ]
+}
